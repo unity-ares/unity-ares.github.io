@@ -448,6 +448,15 @@ body.on-chapter .pgbtn:hover:not(:disabled){background:rgba(255,255,255,.16)}
 .bmk-read.win{color:var(--pos);font-weight:600}
 .bmk-legend{display:flex;gap:18px;font-size:11.5px;color:var(--muted);margin:10px 2px 0;font-weight:500}
 .bmk-legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+/* QoQ delta stat tiles */
+.dstat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-top:14px}
+.dstat{border:1px solid var(--line);border-radius:14px;padding:15px 18px;background:var(--surface)}
+.dstat.tot{background:var(--demandSoft);border-color:var(--demand)}
+.dstat .dlab{font-size:11px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:6px;line-height:1.3;min-height:30px}
+.dstat.tot .dlab{color:var(--demandInk)}
+.dstat .dbig{font-size:25px;font-weight:800;color:var(--ink);margin:8px 0 2px;line-height:1;font-variant-numeric:tabular-nums}
+.dstat .dd{font-size:12.5px;font-weight:800;margin-top:8px;display:inline-block}
+.dstat .dsub{font-size:11.5px;color:var(--muted);margin-top:4px}
 /* Agenda: 3-col grid, compact to fit one screen */
 .agenda-page{max-width:1160px;margin-top:0}
 .agenda-label{margin-bottom:8px}
@@ -894,6 +903,7 @@ V.grow=`
  <div class="opps">${oppCards()}</div>`;
 
 function delta(pct, good){const cls=good?'up':'down';const sign=pct>0?'+':'';return `<span class="${cls}">${sign}${pct}%</span>`}
+function dstat(lab,val,prev,d,tot){return `<div class="dstat${tot?' tot':''}"><div class="dlab">${lab}</div><div class="dbig">${val}</div><div class="dd">${d}</div><div class="dsub">from ${prev}</div></div>`}
 V.qoq=`
  <div class="ey">Quarter over quarter</div>
  <div class="lead">This period vs. the previous period</div>
@@ -901,43 +911,28 @@ V.qoq=`
  <div class="takeaway" style="margin-top:20px"><span class="tk-ic">★</span><p>Almost every line moved the right way. Supply payout is up 258% as Ares came online, and you are buying installs more efficiently than last period.</p></div>
 
  ${sec('User acquisition','users')}
- <div class="card" style="padding:10px 0">
- <table class="t" style="min-width:500px">
- <thead><tr><th style="padding-left:30px">Metric</th><th class="focus" style="text-align:right">This period</th><th style="text-align:right">Previous</th><th style="text-align:right;padding-right:30px">Δ</th></tr></thead>
- <tbody>
- <tr><td class="lead2" style="padding-left:30px">Spend</td><td class="n focus">$288.0k</td><td class="n">$98.4k</td><td class="n" style="padding-right:30px">${delta(192.8,true)}</td></tr>
- <tr><td class="lead2" style="padding-left:30px">Installs</td><td class="n focus">44,990</td><td class="n">11,123</td><td class="n" style="padding-right:30px">${delta(304.5,true)}</td></tr>
- <tr><td class="lead2" style="padding-left:30px">Cost per install</td><td class="n focus">$6.40</td><td class="n">$8.84</td><td class="n" style="padding-right:30px">${delta(-27.6,true)}</td></tr>
- <tr><td class="lead2" style="padding-left:30px">D7 ROAS</td><td class="n focus">23.4%</td><td class="n">25.67%</td><td class="n" style="padding-right:30px">${delta(-8.8,false)}</td></tr>
- </tbody>
- </table>
+ <div class="dstat-grid">
+  ${dstat('Spend','$288.0k','$98.4k',delta(192.8,true))}
+  ${dstat('Installs','44,990','11,123',delta(304.5,true))}
+  ${dstat('Cost per install','$6.40','$8.84',delta(-27.6,true))}
+  ${dstat('D7 ROAS','23.4%','25.67%',delta(-8.8,false))}
  </div>
 
  ${sec('TapJoy demand','target')}
- <div class="card" style="padding:10px 0">
- <table class="t" style="min-width:520px">
- <thead><tr><th style="padding-left:30px">Title</th><th class="focus" style="text-align:right">This period</th><th style="text-align:right">Previous</th><th style="text-align:right;padding-right:30px">Δ</th></tr></thead>
- <tbody>
- <tr><td class="lead2" style="padding-left:30px">${gimg('hvh',20)}Heroes vs. Hordes · Swift</td><td class="n focus">$421.6k</td><td class="n">$120.7k</td><td class="n" style="padding-right:30px">${delta(249,true)}</td></tr>
- <tr><td class="lead2" style="padding-left:30px">${gimg('bh',20)}Baseball Hits 26 · Ares</td><td class="n focus">$48.7k</td><td class="n">$0</td><td class="n" style="padding-right:30px"><span class="up">new</span></td></tr>
- <tr class="tot"><td class="lead2" style="padding-left:30px">Total TapJoy demand</td><td class="n focus">$470.3k</td><td class="n">$120.7k</td><td class="n" style="padding-right:30px">${delta(290,true)}</td></tr>
- </tbody>
- </table>
+ <div class="dstat-grid">
+  ${dstat(gimg('hvh',18)+'Heroes vs. Hordes','$421.6k','$120.7k',delta(249,true))}
+  ${dstat(gimg('bh',18)+'Baseball Hits 26','$48.7k','$0','<span class="up">new</span>')}
+  ${dstat('Total TapJoy demand','$470.3k','$120.7k',delta(290,true),true)}
  </div>
 
  ${sec('Monetization','coin','s')}
- <div class="card" style="padding:10px 0">
- <table class="t" style="min-width:560px">
- <thead><tr><th style="padding-left:30px">Stream</th><th class="focus" style="text-align:right">This period</th><th style="text-align:right">Previous</th><th style="text-align:right;padding-right:30px">Δ</th></tr></thead>
- <tbody>
- <tr><td class="lead2" style="padding-left:30px">${gimg('bh',20)}Ares, Offerwall (Baseball Hits 26)</td><td class="n focus">$455.5k</td><td class="n">$39.3k</td><td class="n" style="padding-right:30px">${delta(1058,true)}</td></tr>
- <tr><td class="lead2" style="padding-left:30px">Ares, Unity Ads</td><td class="n focus">$44.3k</td><td class="n">$5.4k</td><td class="n" style="padding-right:30px">${delta(715,true)}</td></tr>
- <tr><td class="lead2" style="padding-left:30px">${gimg('hvh',20)}Swift, Offerwall (Heroes vs. Hordes)</td><td class="n focus">$74.7k</td><td class="n">$72.5k</td><td class="n" style="padding-right:30px">${delta(3,true)}</td></tr>
- <tr><td class="lead2" style="padding-left:30px">Swift, Unity Ads</td><td class="n focus">$22.0k</td><td class="n">$33.6k</td><td class="n" style="padding-right:30px">${delta(-34,false)}</td></tr>
- <tr><td class="lead2" style="padding-left:30px">Swift, ironSource</td><td class="n focus">$2.0k</td><td class="n">$2.3k</td><td class="n" style="padding-right:30px">${delta(-15,false)}</td></tr>
- <tr class="tot"><td class="lead2" style="padding-left:30px">Total supply</td><td class="n focus">$598.6k</td><td class="n">$167.3k</td><td class="n" style="padding-right:30px">${delta(258,true)}</td></tr>
- </tbody>
- </table>
+ <div class="dstat-grid">
+  ${dstat(gimg('bh',18)+'Ares · Offerwall','$455.5k','$39.3k',delta(1058,true))}
+  ${dstat('Ares · Unity Ads','$44.3k','$5.4k',delta(715,true))}
+  ${dstat(gimg('hvh',18)+'Swift · Offerwall','$74.7k','$72.5k',delta(3,true))}
+  ${dstat('Swift · Unity Ads','$22.0k','$33.6k',delta(-34,false))}
+  ${dstat('Swift · ironSource','$2.0k','$2.3k',delta(-15,false))}
+  ${dstat('Total supply','$598.6k','$167.3k',delta(258,true),true)}
  </div>
 
  <div style="margin-top:34px" class="callbox">

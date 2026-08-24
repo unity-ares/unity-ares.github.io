@@ -36,12 +36,6 @@ body::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
 
 
 
-
-
-
-
- 
-
 header{background:rgba(255,255,255,.85);backdrop-filter:saturate(160%) blur(12px);position:sticky;top:0;z-index:100;box-shadow:0 1px 0 var(--line)}
 header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;background:var(--line)}
 .hbar{display:flex;align-items:center;gap:16px;padding:17px 32px;max-width:1080px;margin:0 auto;flex-wrap:wrap}
@@ -457,6 +451,17 @@ body.on-chapter .pgbtn:hover:not(:disabled){background:rgba(255,255,255,.16)}
 .dstat .dbig{font-size:25px;font-weight:800;color:var(--ink);margin:8px 0 2px;line-height:1;font-variant-numeric:tabular-nums}
 .dstat .dd{font-size:12.5px;font-weight:800;margin-top:8px;display:inline-block}
 .dstat .dsub{font-size:11.5px;color:var(--muted);margin-top:4px}
+/* Growth four-bucket matrix */
+.gb-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.gb-card{border:1px solid var(--line);border-radius:16px;padding:16px 22px 10px;background:var(--surface)}
+.gb-card.sup{border-top:3px solid var(--supply)}
+.gb-card.dem{border-top:3px solid var(--demand)}
+.gb-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.gb-head h3{font-size:16px;font-weight:850;color:var(--ink);margin:0;letter-spacing:-.01em}
+.gb-item{padding:11px 0;border-top:1px solid var(--lineSoft);font-size:12.5px;color:var(--body);line-height:1.5}
+.gb-item:first-of-type{border-top:none}
+.gb-item .git{display:flex;align-items:center;gap:8px;margin-bottom:3px;font-size:13.5px;font-weight:700;color:var(--ink)}
+@media(max-width:820px){.gb-grid{grid-template-columns:1fr}}
 /* Agenda: 3-col grid, compact to fit one screen */
 .agenda-page{max-width:1160px;margin-top:0}
 .agenda-label{margin-bottom:8px}
@@ -868,37 +873,39 @@ const OPPS=[
  ['Win back Swift Unity Ads supply','Reactivate the idle rewarded and interstitial inventory on HvH, down 34% while the offerwall held, about $12k a period.'],
 ];
 function oppCards(){ return OPPS.map(function(o,i){ return '<div class="opp"><div class="onum">0'+(i+3)+'</div><h4>'+o[0]+'</h4><p>'+o[1]+'</p></div>'; }).join(''); }
+function gitem(icon,title,detail){return '<div class="gb-item"><div class="git">'+(icon?gimg(icon,18):'')+title+'</div><div>'+detail+'</div></div>'}
 V.grow=`
  <div class="ey">Where we'd grow</div>
- <div class="lead">Growth priorities, up front</div>
- <div class="sublead">The moves with the most upside next quarter. Full detail, owners and timing sit in the Q3 plan.</div>
+ <div class="lead">Growth priorities</div>
+ <div class="sublead">Two lenses, <b>supply</b> (what you earn) and <b>demand</b> (what you buy), across offerwall and video. Every move maps to one, each with the specific action to take next.</div>
 
- <div class="takeaway"><span class="tk-ic">★</span><p>Two bets carry most of the upside this quarter: <b>scale Baseball Hits into the playoffs</b>, and <b>launch Heroes vs. Hordes on Unity Ads</b>. The rest are supporting moves.</p></div>
+ <div class="takeaway"><span class="tk-ic">★</span><p>The whole plan in one view. The headline moves: <b>scale Baseball Hits into the MLB playoffs</b>, <b>relaunch Heroes vs. Hordes on Unity Ads</b>, and <b>launch The Walking Dead on TapJoy demand</b>.</p></div>
 
- <div class="opp-hero">
-  <div class="tag">Biggest bet · user acquisition</div>
-  <h3>01 · Scale Baseball Hits into the playoffs</h3>
-  <p>Ramp from Sept 29, roughly doubling daily spend over six weeks, with room toward $15k/day by November as ROAS holds. The engine is proven: June matured at 22% D7, above your 20% goal, at the lowest CPI of the quarter.</p>
-  <div class="opp-terms">
-   <div class="opp-term"><b>Ramp Sept 29</b>about 2x daily spend over 6 weeks</div>
-   <div class="opp-term"><b>Ceiling ~$15k/day</b>by November</div>
-   <div class="opp-term"><b>Hold above 20% D7</b>June matured at 22%</div>
-   <div class="opp-term"><b>Early edge</b>D7 campaigns about 2x D28 on day-0</div>
+ <div class="gb-grid">
+  <div class="gb-card sup">
+   <div class="gb-head"><h3>Offerwall supply</h3><span class="pill sup"><span class="pip"></span>Earn</span></div>
+   ${gitem('bh','Baseball Hits, new "Free Gold" placement','Surface the offerwall one tap from the home screen to grow supply. Your team is already considering it.')}
+   ${gitem('hvh','Heroes vs. Hordes, a new placement?','Is there a plan to add a placement and strengthen the offerwall?')}
+  </div>
+  <div class="gb-card dem">
+   <div class="gb-head"><h3>Offerwall demand</h3><span class="pill dem"><span class="pip"></span>Buy</span></div>
+   ${gitem('bh','Baseball Hits, scale spend','About $2k/day today, room toward $5k. iOS D7 30% and rising.')}
+   ${gitem('hvh','Heroes vs. Hordes, increase budget','A strong performer, iOS-US D7 up to 47% even unbaked.')}
+   ${gitem('twd','The Walking Dead, launch on TapJoy demand','Not live here yet. Run as MRCPE on both platforms from day one.')}
+  </div>
+  <div class="gb-card sup">
+   <div class="gb-head"><h3>Video supply</h3><span class="pill sup"><span class="pip"></span>Earn</span></div>
+   ${gitem('hvh','Heroes vs. Hordes, reactivate Unity Ads supply','Is there a plan to add a placement and enhance the rewarded video and interstitial units?')}
+  </div>
+  <div class="gb-card dem">
+   <div class="gb-head"><h3>Video demand</h3><span class="pill dem"><span class="pip"></span>Buy</span></div>
+   ${gitem('bh','Baseball Hits, scale into the MLB playoffs','Ramp from Sept 29 toward $15k/day by November as ROAS holds.')}
+   ${gitem('hvh','Heroes vs. Hordes, relaunch on Unity Ads','Paused before. Fraud tools now handled and ready to re-launch, start on one OS.')}
+   ${gitem('twd','The Walking Dead, sharpen the live campaign','Live about a month. Fix the store and end-card conversion step, align gross vs net.')}
   </div>
  </div>
 
- <div class="opp-hero">
-  <div class="tag">New channel · user acquisition</div>
-  <h3>02 · Launch Heroes vs. Hordes on Unity Ads</h3>
-  <p>Heroes vs. Hordes buys only through TapJoy today. Opening a Unity Ads UA channel adds a fresh, controllable source of installs. We'd start on a single OS to prove the channel, then expand to the other.</p>
-  <div class="opp-terms">
-   <div class="opp-term"><b>Start on one OS</b>prove it, then expand</div>
-   <div class="opp-term"><b>D7 Hybrid first</b>layer in D28 once there's data</div>
-   <div class="opp-term"><b>New UA channel</b>beyond TapJoy today</div>
-  </div>
- </div>
-
- <div class="opps">${oppCards()}</div>`;
+ <div class="note-row" style="margin-top:16px">Full detail, owners and timing sit in the Q3 plan. TapJoy figures are the recent iOS-US read.</div>`;
 
 function delta(pct, good){const cls=good?'up':'down';const sign=pct>0?'+':'';return `<span class="${cls}">${sign}${pct}%</span>`}
 function dstat(lab,val,prev,d,tot){return `<div class="dstat${tot?' tot':''}"><div class="dlab">${lab}</div><div class="dbig">${val}</div><div class="dd">${d}</div><div class="dsub">from ${prev}</div></div>`}
@@ -1026,17 +1033,13 @@ V.ua=`
  </div>
 
  ${sec('Category benchmark, Baseball Hits vs the top spenders','star')}
- <div class="takeaway"><span class="tk-ic">★</span><p>Against the biggest spenders in your category, Baseball Hits leads where it compounds: the <b>lowest CPI</b> and the <b>best D7 retention</b>. Rivals buy more raw volume, you keep more of what you buy.</p></div>
+ <div class="takeaway"><span class="tk-ic">★</span><p>Against the biggest spenders in your category, Baseball Hits buys installs the <b>cheapest</b> and converts efficiently, second on IPM and install rate. You acquire better than rivals spending far more.</p></div>
  <div class="note-row" style="margin-bottom:6px">iOS · US · Apr 1 to Jun 30. Competitors anonymized and ranked by ad spend. Category average is the SensorTower advertiser benchmark.</div>
  <div class="bmk-legend"><span><i style="background:${C.demand}"></i>Baseball Hits 26</span><span><i style="background:${C.supplyL}"></i>Top competitors (anonymized)</span></div>
  <div class="bmk-grid">
   <div class="bmk-card"><div class="bmk-h"><b>Cost per install</b><span>lower is better · cat avg $4.10</span></div>${hbars([
    {label:'Baseball Hits 26',v:4.51,c:C.demand},{label:'Competitor A',v:5.50,c:C.supplyL},{label:'Competitor B',v:5.26,c:C.supplyL},{label:'Competitor C',v:9.05,c:C.supplyL},
   ],{fmt:v=>'$'+v.toFixed(2),lblW:196,rh:40})}<div class="bmk-read win">Lowest CPI of the group, you buy installs cheaper than every top peer.</div></div>
-
-  <div class="bmk-card"><div class="bmk-h"><b>D7 retention</b><span>higher is better · cat avg 13.4%</span></div>${hbars([
-   {label:'Baseball Hits 26',v:23.16,c:C.demand},{label:'Competitor A',v:7.26,c:C.supplyL},{label:'Competitor B',v:22.18,c:C.supplyL},{label:'Competitor C',v:12.42,c:C.supplyL},
-  ],{fmt:v=>v.toFixed(1)+'%',lblW:196,rh:40})}<div class="bmk-read win">Best D7 retention in the group and nearly 2x the category. This is your durable edge.</div></div>
 
   <div class="bmk-card"><div class="bmk-h"><b>Installs per mille (IPM)</b><span>higher is better · cat avg 15.7</span></div>${hbars([
    {label:'Baseball Hits 26',v:16.70,c:C.demand},{label:'Competitor A',v:28.20,c:C.supplyL},{label:'Competitor B',v:8.48,c:C.supplyL},{label:'Competitor C',v:12.45,c:C.supplyL},
@@ -1085,13 +1088,11 @@ V.ua=`
  <div class="callbox" style="margin-top:16px"><h4>The next step, a short optimization call</h4><p style="margin-bottom:0">Align gross vs net, reset the D28 targets to your net curve, re-open Android, and push CPI toward break-even with longer video. Read against your D30 and D90 milestones, not day one. <b>Ares' other titles remain paused</b> for now.</p></div>
 
  ${sec('Category benchmark, The Walking Dead vs the top spenders','star')}
- <div class="takeaway"><span class="tk-ic">★</span><p>Against the biggest spenders in the category, TWD's edge is <b>retention</b>, D7 sits above the category and second in the group. The gap is <b>install efficiency</b>, the highest CPI and lowest IPM here, which points to the store and end-card step, the conversion fix already in the plan, not the audience.</p></div>
+ <div class="takeaway"><span class="tk-ic">★</span><p>TWD is in soft launch, so its install efficiency still trails the top spenders, the <b>highest CPI</b> and <b>lowest IPM</b> here. The fix is the store and end-card conversion step, already in the plan.</p></div>
  <div class="note-row" style="margin-bottom:6px">iOS · US · Aug 1 to 15 (recent read). Competitors anonymized and ranked by ad spend. Category average is the SensorTower advertiser benchmark.</div>
  <div class="bmk-legend"><span><i style="background:${C.demand}"></i>The Walking Dead</span><span><i style="background:${C.supplyL}"></i>Top competitors (anonymized)</span></div>
  <div class="bmk-grid">
-  <div class="bmk-card"><div class="bmk-h"><b>D7 retention</b><span>higher is better · cat avg 9.4%</span></div>${hbars([
-   {label:'The Walking Dead',v:22.27,c:C.demand},{label:'Competitor A',v:21.11,c:C.supplyL},{label:'Competitor B',v:1.90,c:C.supplyL},{label:'Competitor C',v:48.45,c:C.supplyL},
-  ],{fmt:v=>v.toFixed(1)+'%',lblW:200,rh:40})}<div class="bmk-read win">Above the category and second in the group, the audience quality is real.</div></div>
+  
 
   <div class="bmk-card"><div class="bmk-h"><b>Cost per install</b><span>lower is better · cat avg $3.38</span></div>${hbars([
    {label:'The Walking Dead',v:15.49,c:C.demand},{label:'Competitor A',v:10.23,c:C.supplyL},{label:'Competitor B',v:8.48,c:C.supplyL},{label:'Competitor C',v:10.22,c:C.supplyL},
@@ -1491,13 +1492,29 @@ V.m2e=`
 
  <div class="note-row">Each player who <b style="color:var(--ink)">starts from the M2E banner</b>, counting their revenue over <b style="color:var(--ink)">7 days</b>. Live since the <b style="color:var(--ink)">week of June 15</b>.</div>
 
- ${sec('Growing month over month','chart','s')}
- <div class="card" style="padding:10px 0">
- <table class="t" style="min-width:480px"><thead><tr><th style="padding-left:30px">Month</th><th style="text-align:right">Daily visitors</th><th style="text-align:right">Offerwall opens</th><th style="text-align:right;padding-right:30px">Payout</th></tr></thead><tbody>
- <tr><td class="lead2" style="padding-left:30px">June (from the 9th)</td><td class="n">44,200</td><td class="n">66,874</td><td class="n" style="padding-right:30px">$2,046</td></tr>
- <tr class="tot"><td class="lead2" style="padding-left:30px">July (to the 30th)</td><td class="n">58,838</td><td class="n">90,263</td><td class="n" style="padding-right:30px"><span class="up">$3,215</span></td></tr>
- </tbody></table>
- <p style="font-size:12px;color:var(--muted);padding:14px 30px 4px;line-height:1.7">Every part of the M2E channel grew from June to July, reach up about a third and <b style="color:var(--ink)">payout up 57%</b> ($2.0k to $3.2k), even with July a day short.</p>
+ ${sec('Revenue growth since M2E','chart','s')}
+ <div class="grid g2">
+ <div class="card">
+  <div style="font-size:12px;font-weight:800;color:var(--supplyInk);text-transform:uppercase;letter-spacing:.04em;padding:2px 4px">M2E channel payout by month</div>
+  <div style="display:flex;align-items:flex-end;gap:48px;justify-content:center;height:186px;padding:14px 20px 0">
+   <div style="text-align:center">
+    <div style="font-size:15px;font-weight:800;color:var(--ink);margin-bottom:6px">$2.0k</div>
+    <div style="width:74px;height:114px;background:var(--supplyL);border-radius:8px 8px 0 0;margin:0 auto"></div>
+    <div style="font-size:12px;color:var(--muted);margin-top:8px;line-height:1.3">June<br><span style="font-size:10.5px">from the 9th</span></div>
+   </div>
+   <div style="text-align:center">
+    <div style="font-size:15px;font-weight:800;color:var(--ink);margin-bottom:6px">$3.2k</div>
+    <div style="width:74px;height:180px;background:var(--supply);border-radius:8px 8px 0 0;margin:0 auto"></div>
+    <div style="font-size:12px;color:var(--muted);margin-top:8px;line-height:1.3">July<br><span style="font-size:10.5px">to the 30th</span></div>
+   </div>
+  </div>
+  <div class="cap" style="padding-top:8px">Payout up <b style="color:var(--ink)">57% month over month</b>, and reach up about a third, even with July a day short.</div>
+ </div>
+ <div class="card" style="display:flex;flex-direction:column;justify-content:center;gap:8px">
+  <div style="font-size:12px;font-weight:800;color:var(--supplyInk);text-transform:uppercase;letter-spacing:.04em">Revenue uplift since launch</div>
+  <div style="font-size:56px;font-weight:850;color:var(--pos);line-height:1">+14%</div>
+  <div style="font-size:13.5px;color:var(--body);line-height:1.55">Incremental offerwall revenue from M2E, on top of what you were already earning, now reaching <b style="color:var(--ink)">38% of your daily visitors</b>.</div>
+ </div>
  </div>
 
  ${sec('Why it matters, the Almedia answer','star')}

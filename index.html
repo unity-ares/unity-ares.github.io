@@ -690,7 +690,7 @@ function sec(title,ic,cls){return `<div class="sec ${cls||''}"><h3>${title}</h3>
 function q3Priorities(){
  var P=[
  ['01','Protect Baseball Hits scale',[['Objective','Sustain the June scale on Baseball Hits UA.'],['Expected impact','Hold +193% scale at a about $4.76 CPI.'],['Owner','Unity + Ares'],['Timing','Early Q3'],['First action','Keep about $125k/mo; watch D7 ROAS as cohorts mature.'],['Success metric','D7 ROAS holds the 24 to 26% band.']]],
- ['02','Improve Heroes vs. Hordes monetization',[['Objective','Lift HvH offerwall yield and reactivate Unity Ads.'],['Expected impact','+30 to 50% supply revenue; recover about $12k/period.'],['Owner','Unity + Swift'],['Timing','Q3'],['First action','Demand-team eCPM review, HvH $72.71 vs BH $479.73.'],['Success metric','HvH eCPM up; Unity Ads inventory reactivated.']]],
+ ['02','Improve Heroes vs. Hordes monetization',[['Objective','Lift HvH offerwall yield and reactivate Unity Ads.'],['Expected impact','+30 to 50% supply revenue; recover about $12k/period.'],['Owner','Unity + Swift'],['Timing','Q3'],['First action','Demand-team eCPM review, benchmarking HvH to its own genre (survival RPG), not Baseball Hits.'],['Success metric','HvH eCPM up; Unity Ads inventory reactivated.']]],
  ['03','Build the next growth engine',[['Objective','Open a new UA channel and mature a third title.'],['Expected impact','HvH on Unity Ads UA plus a scalable TWD test.'],['Owner','Unity + Swift / Ares'],['Timing','Q3'],['First action','Launch HvH UA (D7 Hybrid first, add D28); iterate TWD.'],['Success metric','HvH UA live; TWD ROAS goal recalibrated.']]],
  ];
  var out='<div class="q3prio">';
@@ -1344,7 +1344,7 @@ V.supply=`
  <div class="ey">Supply · monetization</div>
  <div class="lead">Monetization, publisher earnings</div>
  <div class="sublead">What you earned showing ads in your games · $598.6k total payout · about 30M impressions · Mar 30 to Jun 30, 2026.</div>
- <div class="takeaway" style="margin-top:20px"><span class="tk-ic">★</span><p>Baseball Hits is your monetization engine at a $479.73 offerwall eCPM. Heroes vs. Hordes earns a sixth of that on more impressions, so closing the eCPM gap is your biggest supply lever.</p></div>
+ <div class="takeaway" style="margin-top:20px"><span class="tk-ic">★</span><p>Baseball Hits is your monetization engine at a $479.73 offerwall eCPM. Heroes vs. Hordes earns far less, but they are different genres (baseball vs survival RPG) that monetize the offerwall very differently, so most of that gap is genre, not lost yield.</p></div>
 
  <div class="kpis" style="margin-top:34px">
  <div class="k sup"><div class="khead"><div class="kic">${ICON.coin}</div><div class="lab">Total supply</div></div><div class="val sup">$598.6k</div><div class="note">Publisher payout · +258% vs prior</div></div>
@@ -1359,11 +1359,11 @@ V.supply=`
  {label:'Baseball Hits 26',v:455490,c:C.supply,img:IMG_bh},
  {label:'Heroes vs. Hordes',v:74730,c:C.supplyL,img:IMG_hvh},
  ],{max:560000,fmt:v=>money(v),lblW:250})}
- <div class="cap">Supply eCPM: Baseball Hits $479.73 vs Heroes vs. Hordes $72.71.</div></div>
+ <div class="cap">Supply eCPM: Baseball Hits $479.73 vs Heroes vs. Hordes $72.71. Different genres, not a like-for-like comparison.</div></div>
  <div class="card" style="padding:12px 30px">${nlist([
  ["Baseball Hits 26 is your engine","86% of offerwall supply on premium inventory ($479.73 eCPM), ramped from about $39k last period."],
- ["Heroes vs. Hordes under-monetizes","1.4× the impressions of Baseball Hits but a sixth of the payout ($72.71 eCPM)."],
- ["That eCPM gap is your opportunity","lifting HvH toward Baseball Hits' yield is the biggest supply lever."],
+ ["Heroes vs. Hordes runs a different genre","1.4× the impressions of Baseball Hits at a sixth of the eCPM ($72.71). A survival RPG and a baseball game monetize the offerwall differently, so this is not a like-for-like gap."],
+ ["Still worth a look, on its own terms","There may be room to lift HvH's offerwall yield, but measure it against survival-RPG benchmarks, not against Baseball Hits."],
  ])}</div>
  </div>
 
@@ -1670,7 +1670,7 @@ V.plan=`
  </tr></thead><tbody>
  <tr><td class="lead2" style="padding-left:30px">Hold the June scale, defend ROAS</td><td class="indigo">Unity Ads</td><td>Keep Baseball Hits about $125k/mo; watch D7 ROAS as cohorts mature</td><td class="teal">Sustain +193% scale</td><td style="padding-right:30px">Protect the $4.76 CPI as you grow</td></tr>
  <tr><td class="lead2" style="padding-left:30px">Launch Heroes vs. Hordes on Unity Ads</td><td class="indigo">Unity Ads</td><td>Start with <b>D7 Hybrid</b>; layer in <b>D28 ROAS</b> once there's initial data, running in tandem</td><td class="teal">New UA channel for Swift's flagship</td><td style="padding-right:30px">HvH buys only via TapJoy today, Unity Ads UA is untapped</td></tr>
- <tr><td class="lead2" style="padding-left:30px">Lift Heroes vs. Hordes yield</td><td class="teal">Offerwall</td><td>Demand-team eCPM review, HvH $72.71 vs BH $479.73 supply eCPM</td><td class="teal">+30 to 50% supply revenue</td><td style="padding-right:30px">Largest single monetization gap</td></tr>
+ <tr><td class="lead2" style="padding-left:30px">Lift Heroes vs. Hordes yield</td><td class="teal">Offerwall</td><td>Demand-team eCPM review, benchmarking HvH to its own genre (survival RPG), not Baseball Hits</td><td class="teal">+30 to 50% supply revenue</td><td style="padding-right:30px">Largest single monetization gap</td></tr>
  <tr><td class="lead2" style="padding-left:30px">Add the ironSource network for Ares</td><td class="teal">Network</td><td>Onboard ironSource demand on Ares (Baseball Hits) alongside TapJoy and Unity Ads</td><td class="teal">Incremental supply, more competition</td><td style="padding-right:30px">A new network widens the buyer pool on premium inventory</td></tr>
  <tr><td class="lead2" style="padding-left:30px">Win back Swift Unity Ads supply</td><td class="teal">Unity Ads</td><td>Reactivate rewarded + interstitial on HvH (down 34%)</td><td class="teal">Recover about $12k/period</td><td style="padding-right:30px">Unity Ads fell while offerwall held</td></tr>
  <tr><td class="lead2" style="padding-left:30px">Hold D7 ROAS above target as we scale</td><td class="indigo">Unity Ads</td><td>June cohorts matured at 22% D7, keep the new scale above the 20% goal</td><td class="teal">Protect the scaled return</td><td style="padding-right:30px">June D7 ROAS confirmed above target</td></tr>

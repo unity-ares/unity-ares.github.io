@@ -618,7 +618,7 @@ const ICON={
 };
 
 function money(v){return v>=1000? '$'+(v/1000).toFixed(v>=100000?0:1)+'k' : '$'+v}
-function spark(vals,opts){opts=opts||{};var W=opts.w||320,H=opts.h||70,pad=7,col=opts.col||C.supply;var mn=Math.min.apply(null,vals),mx=Math.max.apply(null,vals);if(mx===mn){mx=mn+1;}var n=vals.length;function x(i){return pad+(W-2*pad)*(n<2?0:i/(n-1));}function y(v){return pad+(H-2*pad)*(1-(v-mn)/(mx-mn));}var pts=vals.map(function(v,i){return x(i).toFixed(1)+','+y(v).toFixed(1);});var line='M'+pts.join(' L');var area='M'+pad.toFixed(1)+','+(H-pad).toFixed(1)+' L'+pts.join(' L')+' L'+(W-pad).toFixed(1)+','+(H-pad).toFixed(1)+' Z';return '<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="display:block;height:'+H+'px" preserveAspectRatio="none" role="img"><path d="'+area+'" fill="'+col+'" opacity="0.10"/><path d="'+line+'" fill="none" stroke="'+col+'" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="'+x(n-1).toFixed(1)+'" cy="'+y(vals[n-1]).toFixed(1)+'" r="3.6" fill="'+col+'"/></svg>'}
+function spark(vals,opts){opts=opts||{};var W=opts.w||320,H=opts.h||70,pad=7,col=opts.col||C.supply;var mn=Math.min.apply(null,vals),mx=Math.max.apply(null,vals);if(mx===mn){mx=mn+1;}var n=vals.length;function x(i){return pad+(W-2*pad)*(n<2?0:i/(n-1));}function y(v){return pad+(H-2*pad)*(1-(v-mn)/(mx-mn));}var pts=vals.map(function(v,i){return x(i).toFixed(1)+','+y(v).toFixed(1);});var line='M'+pts.join(' L');var area='M'+pad.toFixed(1)+','+(H-pad).toFixed(1)+' L'+pts.join(' L')+' L'+(W-pad).toFixed(1)+','+(H-pad).toFixed(1)+' Z';return '<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="display:block;height:'+H+'px" preserveAspectRatio="none" role="img"><path d="'+area+'" fill="'+col+'" opacity="0.10"/><path d="'+line+'" fill="none" stroke="'+col+'" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="'+x(n-1).toFixed(1)+'" cy="'+y(vals[n-1]).toFixed(1)+'" r="3" fill="#fff" stroke="'+col+'" stroke-width="2"/></svg>'}
 function vbars(labels, series, opts={}){
  const W=560,H=280, pad={l:8,r:8,t:32,b:42}, p='v'+(SN++)+'_';
  const max=opts.max||Math.max(...series.flatMap(s=>s.v))*1.12;
@@ -1363,7 +1363,7 @@ V.supply=`
  <div class="card" style="padding:12px 30px">${nlist([
  ["Baseball Hits 26 is your engine","86% of offerwall supply on premium inventory ($479.73 eCPM), ramped from about $39k last period."],
  ["Heroes vs. Hordes runs a different genre","1.4× the impressions of Baseball Hits at a sixth of the eCPM ($72.71). A survival RPG and a baseball game monetize the offerwall differently, so this is not a like-for-like gap."],
- ["Still worth a look, on its own terms","There may be room to lift HvH's offerwall yield, but measure it against survival-RPG benchmarks, not against Baseball Hits."],
+ ["The fairer comparison is The Walking Dead","Same broad genre as Heroes vs. Hordes. On Unity Ads, TWD earns $38.27 eCPM vs HvH's roughly $23, so there is real room to lift HvH within its own genre, not just a baseball gap."],
  ])}</div>
  </div>
 
@@ -1419,7 +1419,8 @@ V.supply=`
    <div><div class="kl-v">$72.0k</div><div class="kl-l">revenue</div></div>
    <div><div class="kl-v">$38.27</div><div class="kl-l">eCPM Revenue</div></div>
   </div>
-  <div class="cap" style="padding-top:10px">SDK 4.19.0 launched July 2 and scaled to about 90K to 110K impressions a day by late July, now the largest Unity Ads earner across the Ares titles.</div></div>
+  <div class="cap" style="padding-top:10px">SDK 4.19.0 launched July 2 and scaled to about 90K to 110K impressions a day by late July, now the largest Unity Ads earner across the Ares titles.</div>
+  <div style="margin-top:10px;background:var(--supplySoft);border:1px solid var(--supplyBd);border-radius:10px;padding:9px 13px;font-size:12.5px;color:var(--supplyInk);font-weight:600">&rarr; Immediate action: raise TWD's currency rating from Med to High to lift its eCPM.</div></div>
  </div>
  <div class="note-row" style="margin-top:14px">Unity Ads publisher monetization, Mar 30 to Jul 31, 2026. Revenue and eCPM Revenue only.</div>
 

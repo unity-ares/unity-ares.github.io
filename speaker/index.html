@@ -443,6 +443,11 @@ body.on-chapter .pgbtn:hover:not(:disabled){background:rgba(255,255,255,.16)}
 .copt-col li{font-size:12.5px;color:var(--body);line-height:1.5}
 .copt-need{margin:12px 0 0;padding-left:18px;display:grid;gap:10px}
 .copt-need li{font-size:13.5px;color:var(--body);line-height:1.5}
+.pb-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;padding:6px 6px 2px}
+.pb-grid h4{font-size:13.5px;margin:0 0 10px;color:var(--ink);font-weight:800}
+.pb-grid ul{margin:0;padding-left:18px;display:grid;gap:9px}
+.pb-grid li{font-size:12.5px;color:var(--body);line-height:1.5}
+@media(max-width:820px){.pb-grid{grid-template-columns:1fr;gap:14px}}
 @media(max-width:900px){.copt-grid{grid-template-columns:1fr}}
 /* Category benchmark diagrams */
 .bmk-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:18px;margin-top:14px}
@@ -1281,6 +1286,33 @@ V.creatives=`
   <li>Two new iOS creative tests.</li>
   <li>A rotation calendar set up with your new creative lead.</li>
  </ul>
+
+ ${sec('Pause criteria and upload cadence','chart')}
+ <div class="note-row" style="margin-bottom:10px">Our rules of thumb for when to retire a pack and how fast to feed new ones. Worth sharing with your creative lead.</div>
+ <details class="collapse">
+ <summary>Show the creative pause and upload playbook</summary>
+ <div class="cbody"><div class="pb-grid">
+  <div>
+   <h4>Pause a creative when</h4>
+   <ul>
+    <li>It has passed learning (about 10k impressions/starts, tracked separately per iOS and Android).</li>
+    <li>It has had 10+ days post-learning to explore and find sub-audiences.</li>
+    <li>It sits below 10% impression share of voice (SOV).</li>
+    <li>Everything you remove in one pass stays under 20% total SOV. On a 10,000-impression campaign, the paused packs shouldn't add up to more than 2,000 impressions.</li>
+   </ul>
+  </div>
+  <div>
+   <h4>Upload cadence and volume</h4>
+   <ul>
+    <li>Add new packs weekly into your highest-spend campaigns.</li>
+    <li>Scaling up: add 4 to 6 packs every 3 days once the prior batch hits 5 to 10k starts.</li>
+    <li>Keep fewer than 3 packs in learning at once (up to 8 during aggressive scale-up).</li>
+    <li>Budget $50 to 100/day per live pack in Tier 1/US so each gets real auction exposure.</li>
+    <li>Mix formats and orientations: video + static end card, video + IEC, standalone playable.</li>
+   </ul>
+  </div>
+ </div></div>
+ </details>
  `;
 
 V.owd=`

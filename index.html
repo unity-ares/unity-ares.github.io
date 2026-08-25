@@ -543,6 +543,14 @@ svg [data-tip]:hover{opacity:.82}
 .m2e-step .ms-d{font-size:11.5px;color:var(--body);line-height:1.45}
 .m2e-arrow{display:flex;align-items:center;color:var(--faint);font-size:18px;flex:none}
 @media(max-width:820px){.m2e-flow{flex-direction:column}.m2e-arrow{transform:rotate(90deg);justify-content:center;padding:2px 0}}
+details.collapse{border:1px solid var(--line);border-radius:14px;background:var(--surface);overflow:hidden}
+details.collapse>summary{list-style:none;cursor:pointer;padding:14px 24px;font-size:13.5px;font-weight:700;color:var(--demandInk);display:flex;align-items:center;justify-content:space-between;gap:10px}
+details.collapse>summary::-webkit-details-marker{display:none}
+details.collapse>summary::after{content:'▸';color:var(--muted);font-size:12px;transition:transform .18s}
+details.collapse[open]>summary::after{transform:rotate(90deg)}
+details.collapse>summary:hover{background:var(--lineSoft)}
+details.collapse[open]>summary{border-bottom:1px solid var(--lineSoft)}
+details.collapse .cbody{padding:8px 0 4px}
 .pgbtn:hover:not(:disabled) .pg-ar{color:var(--demand)}
 .pgbtn:hover:not(:disabled){border-color:var(--demand);color:var(--demand)}
 .pgbtn:disabled{opacity:.35;cursor:default}
@@ -1191,12 +1199,15 @@ V.creatives=`
  </div>
 
  ${sec('All creatives, by spend','chart')}
- <div class="card" style="padding:10px 0;overflow-x:auto">
+ <div class="cap" style="padding:0 2px 8px">The three biggest creatives are all <b style="color:var(--ink)">playables</b>, and they carry the volume. But the <b style="color:var(--ink)">video</b> cuts convert better early, 9 to 11% D0 IAP ROAS at a lower CPI, versus 5 to 6% on the big playables. More reason to widen the video mix.</div>
+ <details class="collapse">
+ <summary>Show the full breakdown, all ${CBRK.length} creatives by spend</summary>
+ <div class="cbody" style="overflow-x:auto">
  <table class="t" style="min-width:640px"><thead><tr><th style="padding-left:30px">Creative</th><th>Format</th><th style="text-align:right">Share of UA</th><th style="text-align:right">CPI</th><th style="text-align:right;padding-right:30px">D0 IAP ROAS</th></tr></thead><tbody>
  ${CBRK.map(c=>`<tr><td class="lead2" style="padding-left:30px">${c[0]} <span style="color:var(--muted);font-weight:400">· ${c[1]}</span></td><td>${c[2]==='Video'?'<span class="pill sup" style="font-size:9px">Video</span>':'<span class="pill dem" style="font-size:9px">Playable</span>'}</td><td class="n">${c[3]}%</td><td class="n">${c[4]}</td><td class="n" style="padding-right:30px">${c[5]}</td></tr>`).join('')}
  </tbody></table>
- <div class="cap" style="padding:8px 30px 4px">The three biggest creatives are all <b style="color:var(--ink)">playables</b>, and they carry the volume. But the <b style="color:var(--ink)">video</b> cuts are converting better early, 9 to 11% D0 IAP ROAS at a lower CPI, versus 5 to 6% on the big playables. More reason to widen the video mix.</div>
  </div>
+ </details>
 
  ${sec('Creative mix','chart')}
  <div class="card" style="padding:16px 30px 20px">
@@ -1534,22 +1545,10 @@ V.m2e=`
  <div class="k sup"><div class="khead"><div class="kic">${ICON.users}</div><div class="lab">Share of daily reach</div></div><div class="val sup">38%</div><div class="note">of offerwall visitors (DUV)</div></div>
  <div class="k sup"><div class="khead"><div class="kic">${ICON.coin}</div><div class="lab">M2E channel payout</div></div><div class="val sup">$5,261</div><div class="note">14% of offerwall payout</div></div>
  <div class="k"><div class="khead"><div class="kic">${ICON.chart}</div><div class="lab">Offer impressions</div></div><div class="val">1.73M</div><div class="note">36% of impressions</div></div>
- <div class="k"><div class="khead"><div class="kic">${ICON.gauge}</div><div class="lab">Conversion rate</div></div><div class="val">3.8%</div><div class="note">vs 8.2% organic</div></div>
+ <div class="k sup"><div class="khead"><div class="kic">${ICON.gauge}</div><div class="lab">Revenue uplift</div></div><div class="val sup">+14%</div><div class="note">since launch, vs baseline</div></div>
  </div>
 
- ${sec('M2E vs. Organic across the funnel','chart','s')}
- <div class="card" style="padding:10px 0;overflow-x:auto">
- <table class="t" style="min-width:560px"><thead><tr><th style="padding-left:30px">Stage</th><th style="text-align:right">M2E</th><th style="text-align:right">Organic</th><th style="text-align:right;padding-right:30px">M2E share</th></tr></thead><tbody>
- <tr><td class="lead2" style="padding-left:30px">Daily visitors (DUV)</td><td class="n">103,038</td><td class="n">166,617</td><td class="n" style="padding-right:30px"><b style="color:var(--ink)">38%</b></td></tr>
- <tr><td class="lead2" style="padding-left:30px">Offerwall opens</td><td class="n">157,137</td><td class="n">274,111</td><td class="n" style="padding-right:30px"><b style="color:var(--ink)">36%</b></td></tr>
- <tr><td class="lead2" style="padding-left:30px">Offer impressions</td><td class="n">1.73M</td><td class="n">3.10M</td><td class="n" style="padding-right:30px"><b style="color:var(--ink)">36%</b></td></tr>
- <tr><td class="lead2" style="padding-left:30px">Conversions</td><td class="n">7,024</td><td class="n">26,241</td><td class="n" style="padding-right:30px"><b style="color:var(--ink)">21%</b></td></tr>
- <tr class="tot"><td class="lead2" style="padding-left:30px">Payout (Swift revenue)</td><td class="n">$5,261</td><td class="n">$32,360</td><td class="n" style="padding-right:30px"><b style="color:var(--ink)">14%</b></td></tr>
- </tbody></table>
- <div class="cap" style="padding:8px 30px 4px">M2E brings <b>38% of visitors and 36% of opens</b> but <b>14% of payout</b>, because it converts at <b>3.8% vs 8.2% organic</b>. That gap is the upside.</div>
- </div>
 
- <div class="note-row">Each player who <b style="color:var(--ink)">starts from the M2E banner</b>, counting their revenue over <b style="color:var(--ink)">7 days</b>. Live since the <b style="color:var(--ink)">week of June 15</b>.</div>
 
  ${sec('Revenue growth since M2E','chart','s')}
  <div class="grid g2">
@@ -1580,15 +1579,15 @@ V.m2e=`
  <div class="callbox">
  <h4>Heroes vs. Hordes: a Unity-native growth engine</h4>
  <p>M2E dynamic offerwall already drives <b>38% of your offerwall reach</b> and <b>14% of its payout</b>, growing month over month, a way to grow the exact channel you're weighing a pullback on, on Unity's own demand.</p>
- <p><b>The upside lever is conversion.</b> M2E converts at about half organic (3.8% vs 8.2%), and returning M2E users out-earn new ones ($2.93 vs $1.55 ARPDUV). Keep scaling volume and improve offer matching, and payout share climbs past today's 14%.</p>
+ <p><b>The upside lever is conversion.</b> M2E converts at a lower rate than organic today, but its returning users are worth more per visit than new ones. Keep scaling volume and improve offer matching, and payout share climbs past today's 14%.</p>
  </div>
 
  ${sec('Now live on Baseball Hits too (Ares)','star','s')}
  <div class="note-row" style="margin-bottom:14px">M2E turned on for <b style="color:var(--ink)">Baseball Hits (Ares)</b> on <b style="color:var(--ink)">July 27</b>, so this is an early four-week read. Same channel, on Ares's flagship, alongside the Heroes vs. Hordes rollout above.</div>
  <div class="card" style="padding:10px 0;overflow-x:auto">
- <table class="t" style="min-width:700px"><thead><tr><th style="padding-left:30px">Title</th><th style="text-align:right">M2E enabled</th><th style="text-align:right">M2E reach (DUV)</th><th style="text-align:right">M2E payout</th><th style="text-align:right">Payout share</th><th style="text-align:right;padding-right:30px">Conversion, M2E vs organic</th></tr></thead><tbody>
- <tr><td class="lead2" style="padding-left:30px">${gimg('hvh',20)}Heroes vs. Hordes · Swift</td><td class="n">wk of Jun 15</td><td class="n">38%</td><td class="n">$5,261</td><td class="n">14%</td><td class="n" style="padding-right:30px">3.8% vs 8.2%</td></tr>
- <tr><td class="lead2" style="padding-left:30px">${gimg('bh',20)}Baseball Hits 26 · Ares</td><td class="n">Jul 27</td><td class="n">16%</td><td class="n">$830</td><td class="n">5%</td><td class="n" style="padding-right:30px">4.4% vs 12.3%</td></tr>
+ <table class="t" style="min-width:560px"><thead><tr><th style="padding-left:30px">Title</th><th style="text-align:right">M2E enabled</th><th style="text-align:right">M2E reach (DUV)</th><th style="text-align:right">M2E payout</th><th style="text-align:right;padding-right:30px">Payout share</th></tr></thead><tbody>
+ <tr><td class="lead2" style="padding-left:30px">${gimg('hvh',20)}Heroes vs. Hordes · Swift</td><td class="n">wk of Jun 15</td><td class="n">38%</td><td class="n">$5,261</td><td class="n" style="padding-right:30px">14%</td></tr>
+ <tr><td class="lead2" style="padding-left:30px">${gimg('bh',20)}Baseball Hits 26 · Ares</td><td class="n">Jul 27</td><td class="n">16%</td><td class="n">$830</td><td class="n" style="padding-right:30px">5%</td></tr>
  </tbody></table>
  <div class="cap" style="padding:8px 30px 4px">Younger and smaller, but the same shape: real incremental reach that under-converts organic today. Payout and revenue only.</div>
  </div>`;

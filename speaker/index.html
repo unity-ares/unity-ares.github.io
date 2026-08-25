@@ -522,7 +522,10 @@ body.presenting .onpage{right:18px;display:flex}
 .content .wrap{max-width:1600px;margin:0;padding:44px 300px 18px 60px}
 .pagenav{max-width:1600px;margin:0;padding:6px 300px 52px 60px;display:flex;align-items:center;justify-content:space-between;gap:16px}
 @media(max-width:1240px){.content .wrap{padding:40px 44px 18px}.pagenav{padding:6px 44px 52px}}
-.pgbtn{font-family:var(--font);font-size:13px;font-weight:700;padding:11px 18px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.pgbtn{font-family:var(--font);font-size:13px;font-weight:700;padding:11px 18px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:8px;max-width:280px}
+.pgbtn .pg-nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pgbtn .pg-ar{color:var(--muted);font-size:17px;line-height:1;flex:none}
+.pgbtn:hover:not(:disabled) .pg-ar{color:var(--demand)}
 .pgbtn:hover:not(:disabled){border-color:var(--demand);color:var(--demand)}
 .pgbtn:disabled{opacity:.35;cursor:default}
 .pgpos{font-size:12.5px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
@@ -1848,10 +1851,18 @@ function updProg(){ var h=document.documentElement.scrollHeight-window.innerHeig
 window.addEventListener('scroll',updProg,{passive:true});
 window.addEventListener('scroll',tocSpy,{passive:true});
 window.addEventListener('resize',updProg);
+function nameOf(id){
+ if(id==='welcome') return 'Welcome';
+ if(id==='agenda') return 'Agenda';
+ if(id&&id.indexOf('div:')===0) return id.slice(4);
+ var a=AGENDA.find(function(x){return x.id===id;}); return a?a.t:'';
+}
 function updNav(){
  var i=ORDER.indexOf(cur);
  var pv=document.getElementById('pgprev'), nx=document.getElementById('pgnext'), pos=document.getElementById('pgpos');
  pv.disabled=i<=0; nx.disabled=i>=ORDER.length-1;
+ pv.innerHTML = i>0 ? '<span class="pg-ar">&lsaquo;</span><span class="pg-nm">'+nameOf(ORDER[i-1])+'</span>' : '<span class="pg-ar">&lsaquo;</span> Previous';
+ nx.innerHTML = i<ORDER.length-1 ? '<span class="pg-nm">'+nameOf(ORDER[i+1])+'</span><span class="pg-ar">&rsaquo;</span>' : 'Next <span class="pg-ar">&rsaquo;</span>';
  var isDiv=cur.indexOf('div:')===0;
  var aIdx=AGENDA.findIndex(function(a){return a.id===cur;});
  pos.textContent = cur==='welcome' ? 'Welcome' : cur==='agenda' ? 'Agenda' : isDiv ? cur.slice(4) : ((aIdx+1)+' of '+AGENDA.length);
@@ -1882,6 +1893,16 @@ function tocSpy(){
  heads.forEach(function(h,i){ if(h.getBoundingClientRect().top<=150) active=i; });
  nav.querySelectorAll('.op-i').forEach(function(b,i){ b.classList.toggle('on', i===active); });
 }
+function staggerIn(tab){
+ if(!tab) return;
+ var kids=tab.children;
+ for(var i=0;i<kids.length;i++){
+  var el=kids[i];
+  el.style.opacity='0';
+  el.style.animation='rise .5s cubic-bezier(.22,.61,.36,1) forwards';
+  el.style.animationDelay=(Math.min(i,12)*0.045)+'s';
+ }
+}
 function go(id){
  cur=id;
  document.body.classList.toggle('on-welcome', id==='welcome');
@@ -1891,6 +1912,7 @@ function go(id){
  window.scrollTo({top:0}); updProg(); updNav(); updNotes();
  document.body.classList.remove('rail-open');
  if(id==='overview') requestAnimationFrame(animateCover);
+ else if(id!=='welcome' && id.indexOf('div:')!==0) staggerIn(mainEl.querySelector('.tab'));
 }
 railEl.addEventListener('click',e=>{const b=e.target.closest('.rl,.rl-ghead');if(b&&b.dataset.id)go(b.dataset.id)});
 document.getElementById('pgprev').onclick=()=>stepSlide(-1);

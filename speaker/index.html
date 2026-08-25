@@ -525,6 +525,13 @@ body.presenting .onpage{right:18px;display:flex}
 .pgbtn{font-family:var(--font);font-size:13px;font-weight:700;padding:11px 18px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:8px;max-width:280px}
 .pgbtn .pg-nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pgbtn .pg-ar{color:var(--muted);font-size:17px;line-height:1;flex:none}
+.upnext{display:flex;align-items:center;gap:14px;width:100%;margin-top:44px;padding:16px 22px;border:1px solid var(--line);border-radius:14px;background:var(--surface);cursor:pointer;font-family:var(--font);text-align:left;transition:border-color .15s,transform .15s,box-shadow .15s}
+.upnext:hover{border-color:var(--demand);transform:translateY(-2px);box-shadow:0 8px 22px rgba(91,80,214,.12)}
+.upnext .un-txt{display:flex;flex-direction:column;gap:3px}
+.upnext .un-k{font-size:10.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.upnext .un-t{font-size:17px;font-weight:850;color:var(--ink);letter-spacing:-.01em}
+.upnext .un-ar{margin-left:auto;font-size:22px;color:var(--demand);transition:transform .15s}
+.upnext:hover .un-ar{transform:translateX(4px)}
 .pgbtn:hover:not(:disabled) .pg-ar{color:var(--demand)}
 .pgbtn:hover:not(:disabled){border-color:var(--demand);color:var(--demand)}
 .pgbtn:disabled{opacity:.35;cursor:default}
@@ -1903,16 +1910,36 @@ function staggerIn(tab){
   el.style.animationDelay=(Math.min(i,12)*0.045)+'s';
  }
 }
+function countUp(el){
+ var raw=el.textContent, m=raw.match(/^(\D*?)([\d,]+(?:\.\d+)?)(\D*)$/); if(!m) return;
+ var pre=m[1], numStr=m[2], suf=m[3], hasComma=numStr.indexOf(',')>-1;
+ var clean=numStr.replace(/,/g,''), dec=(clean.split('.')[1]||'').length, target=parseFloat(clean);
+ if(!isFinite(target)) return;
+ function fmt(v){ var s=dec?v.toFixed(dec):Math.round(v).toString(); if(hasComma){ var p=s.split('.'); p[0]=(+p[0]).toLocaleString(); s=p.join('.'); } return pre+s+suf; }
+ if(!window.requestAnimationFrame || (window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches)){ el.textContent=fmt(target); return; }
+ var dur=850, t0=performance.now();
+ (function step(t){ var p=Math.min((t-t0)/dur,1); p=1-Math.pow(1-p,3); el.textContent=fmt(target*p); if(p<1) requestAnimationFrame(step); })(t0);
+ setTimeout(function(){ el.textContent=fmt(target); }, dur+160); // guarantee final value even if rAF is throttled
+}
+function animateStats(tab){ if(tab) tab.querySelectorAll('.k .val, .st .val, .dstat .dbig, .dstat .dd span, .kl-v').forEach(countUp); }
+function upNext(id){
+ var i=ORDER.indexOf(id); if(i<0||i>=ORDER.length-1) return '';
+ var nid=ORDER[i+1];
+ return '<button class="upnext" onclick="go(\''+nid+'\')"><span class="un-txt"><span class="un-k">Up next</span><span class="un-t">'+nameOf(nid)+'</span></span><span class="un-ar">&rarr;</span></button>';
+}
 function go(id){
  cur=id;
  document.body.classList.toggle('on-welcome', id==='welcome');
  document.body.classList.toggle('on-chapter', id.indexOf('div:')===0);
  mainEl.innerHTML=`<section class="tab on">${V[id]}</section>`;
+ var tab=mainEl.querySelector('.tab');
+ var content = id!=='welcome' && id.indexOf('div:')!==0;
+ if(content){ var un=upNext(id); if(un) tab.insertAdjacentHTML('beforeend', un); }
  injectToc();
  window.scrollTo({top:0}); updProg(); updNav(); updNotes();
  document.body.classList.remove('rail-open');
- if(id==='overview') requestAnimationFrame(animateCover);
- else if(id!=='welcome' && id.indexOf('div:')!==0) staggerIn(mainEl.querySelector('.tab'));
+ if(id==='overview'){ requestAnimationFrame(animateCover); }
+ else if(content){ staggerIn(tab); animateStats(tab); }
 }
 railEl.addEventListener('click',e=>{const b=e.target.closest('.rl,.rl-ghead');if(b&&b.dataset.id)go(b.dataset.id)});
 document.getElementById('pgprev').onclick=()=>stepSlide(-1);

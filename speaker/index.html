@@ -532,6 +532,10 @@ body.presenting .onpage{right:18px;display:flex}
 .upnext .un-t{font-size:17px;font-weight:850;color:var(--ink);letter-spacing:-.01em}
 .upnext .un-ar{margin-left:auto;font-size:22px;color:var(--demand);transition:transform .15s}
 .upnext:hover .un-ar{transform:translateX(4px)}
+#tip{position:fixed;z-index:400;pointer-events:none;background:#12141c;color:#fff;font-size:12px;font-weight:600;padding:7px 11px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.30);opacity:0;transform:translateY(4px);transition:opacity .12s,transform .12s;white-space:nowrap;font-family:var(--font)}
+#tip.on{opacity:1;transform:none}
+svg [data-tip]{transition:opacity .12s;cursor:default}
+svg [data-tip]:hover{opacity:.82}
 .pgbtn:hover:not(:disabled) .pg-ar{color:var(--demand)}
 .pgbtn:hover:not(:disabled){border-color:var(--demand);color:var(--demand)}
 .pgbtn:disabled{opacity:.35;cursor:default}
@@ -644,7 +648,7 @@ function vbars(labels, series, opts={}){
  const gx=pad.l+i*gw, bw=Math.min(56,(gw*0.62)/series.length);
  const groupW=bw*series.length+(series.length-1)*10, startX=gx+(gw-groupW)/2;
  series.forEach((s,si)=>{const v=s.v[i], bh=(H-pad.t-pad.b)*v/max, bx=startX+si*(bw+10), by=H-pad.b-bh;
- g+=`<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="5" fill="${gf(s.c,p)}"/>`;});
+ g+=`<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="5" fill="${gf(s.c,p)}" data-tip="${lb} · ${s.name}: ${v.toLocaleString()}"/>`;});
  g+=`<text x="${gx+gw/2}" y="${H-pad.b+22}" font-size="12.5" fill="${C.muted}" text-anchor="middle">${lb}</text>`;
  });
  g+=`<line x1="${pad.l}" y1="${H-pad.b}" x2="${W-pad.r}" y2="${H-pad.b}" stroke="${C.line}"/>`;
@@ -661,7 +665,7 @@ function hbars(rows, opts={}){
  g+=`<image href="${r.img}" x="6" y="${iy}" width="${s}" height="${s}" clip-path="url(#${cid})" preserveAspectRatio="xMidYMid slice"/>`;
  tx=6+s+11; anchor='start';}
  g+=`<text x="${tx}" y="${cy+6}" font-size="18" font-weight="600" fill="${C.ink}" text-anchor="${anchor}">${r.label}</text>`;
- g+=`<rect x="${lblW}" y="${cy-bh/2}" width="${Math.max(bw,2)}" height="${bh}" rx="5" fill="${gf(c,p)}"/>`;
+ g+=`<rect x="${lblW}" y="${cy-bh/2}" width="${Math.max(bw,2)}" height="${bh}" rx="5" fill="${gf(c,p)}" data-tip="${r.label}: ${opts.fmt?opts.fmt(r.v):r.v}"/>`;
  g+=`<text x="${lblW+Math.max(bw,2)+11}" y="${cy+6}" font-size="18" font-weight="700" fill="${C.ink}">${opts.fmt?opts.fmt(r.v):r.v}</text>`;});
  return `<svg class="chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">${g}</svg>`;
 }
@@ -672,7 +676,7 @@ function combo(labels, spend, roas){
  labels.forEach((lb,i)=>{
  const gx=pad.l+i*gw, bw=Math.min(60,gw*0.42), bx=gx+(gw-bw)/2;
  const bh=plotH*spend[i]/maxS, by=H-pad.b-bh;
- g+=`<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="5" fill="${gf(C.demand,p)}"/>`;
+ g+=`<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="5" fill="${gf(C.demand,p)}" data-tip="${lb} spend: $${(spend[i]/1000).toFixed(1)}k"/>`;
  const inside=bh>44, ly=inside?by+19:by-8, lc=inside?'#fff':C.ink;
  g+=`<text x="${bx+bw/2}" y="${ly}" font-size="11.5" font-weight="700" fill="${lc}" text-anchor="middle">$${(spend[i]/1000).toFixed(1)}k</text>`;
  g+=`<text x="${gx+gw/2}" y="${H-pad.b+22}" font-size="12.5" fill="${C.muted}" text-anchor="middle">${lb}</text>`;
@@ -681,7 +685,7 @@ function combo(labels, spend, roas){
  const solid=pts.filter(x=>x);
  if(solid.length>1) g+=`<polyline fill="none" stroke="${C.accent}" stroke-width="2.5" stroke-linejoin="round" points="${solid.map(x=>x.join(',')).join(' ')}"/>`;
  pts.forEach((pt,i)=>{ if(!pt) return;
- g+=`<circle cx="${pt[0]}" cy="${pt[1]}" r="4.5" fill="#fff" stroke="${C.accent}" stroke-width="2.5"/>`;
+ g+=`<circle cx="${pt[0]}" cy="${pt[1]}" r="4.5" fill="#fff" stroke="${C.accent}" stroke-width="2.5" data-tip="${labels[i]} D7 ROAS: ${roas[i]}%"/>`;
  g+=`<rect x="${pt[0]-17}" y="${pt[1]-24}" width="34" height="16" rx="8" fill="#fff" stroke="${C.line}"/>`;
  g+=`<text x="${pt[0]}" y="${pt[1]-12.5}" font-size="11" font-weight="700" fill="${C.accent}" text-anchor="middle">${roas[i]}%</text>`;});
  g+=`<rect x="${pad.l}" y="6" width="11" height="11" rx="3" fill="${gf(C.demand,p)}"/><text x="${pad.l+17}" y="15.5" font-size="12" fill="${C.muted}">Spend</text>`;
@@ -695,7 +699,7 @@ function flowBar(title, total, parts){
  g+=`<text x="${W}" y="16" font-size="18" font-weight="800" fill="${C.ink}" text-anchor="end">${money(total)}</text>`;
  let cx=0; const scale=W/total;
  parts.forEach(pt=>{const pw=pt.v*scale, mid=cx+pw/2;
- g+=`<rect x="${cx}" y="${y}" width="${Math.max(pw-3,1)}" height="${barH}" rx="8" fill="${gf(pt.c,p)}"/>`;
+ g+=`<rect x="${cx}" y="${y}" width="${Math.max(pw-3,1)}" height="${barH}" rx="8" fill="${gf(pt.c,p)}" data-tip="${pt.label}: ${money(pt.v)}"/>`;
  if(pw>150){
   g+=`<text x="${mid}" y="${y+barH/2+5}" font-size="14.5" font-weight="700" fill="#fff" text-anchor="middle">${pt.label} · ${money(pt.v)}</text>`;
  } else {
@@ -1928,6 +1932,11 @@ function countUp(el){
  (function step(t){ var p=Math.min((t-t0)/dur,1); p=1-Math.pow(1-p,3); el.textContent=fmt(target*p); if(p<1) requestAnimationFrame(step); })(t0);
  setTimeout(function(){ el.textContent=fmt(target); }, dur+160); // guarantee final value even if rAF is throttled
 }
+var tipEl;
+function ensureTip(){ if(!tipEl){ tipEl=document.createElement('div'); tipEl.id='tip'; document.body.appendChild(tipEl); } return tipEl; }
+document.addEventListener('mouseover', function(e){ var t=e.target.closest&&e.target.closest('[data-tip]'); if(!t) return; var tip=ensureTip(); tip.textContent=t.getAttribute('data-tip'); tip.classList.add('on'); });
+document.addEventListener('mousemove', function(e){ if(!tipEl||!tipEl.classList.contains('on')) return; var x=e.clientX+14, y=e.clientY-14, w=tipEl.offsetWidth, h=tipEl.offsetHeight; if(x+w>window.innerWidth-8) x=e.clientX-w-14; if(y<8) y=e.clientY+20; tipEl.style.left=x+'px'; tipEl.style.top=y+'px'; });
+document.addEventListener('mouseout', function(e){ var t=e.target.closest&&e.target.closest('[data-tip]'); if(t&&tipEl) tipEl.classList.remove('on'); });
 function animateStats(tab){ if(tab) tab.querySelectorAll('.k .val, .st .val, .dstat .dbig, .dstat .dd span, .kl-v').forEach(countUp); }
 function upNext(id){
  var i=ORDER.indexOf(id); if(i<0||i>=ORDER.length-1) return '';

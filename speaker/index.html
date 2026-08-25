@@ -689,14 +689,19 @@ function combo(labels, spend, roas){
  return `<svg class="chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">${g}</svg>`;
 }
 function flowBar(title, total, parts){
- const W=940,H=92, barH=48, y=36, p='f'+(SN++)+'_';
+ const W=940,H=112, barH=48, y=34, p='f'+(SN++)+'_';
  let g=defs(parts.map(x=>x.c),p);
- g+=`<text x="0" y="18" font-size="15" font-weight="700" fill="${C.body}">${title}</text>`;
- g+=`<text x="${W}" y="18" font-size="18" font-weight="800" fill="${C.ink}" text-anchor="end">${money(total)}</text>`;
+ g+=`<text x="0" y="16" font-size="15" font-weight="700" fill="${C.body}">${title}</text>`;
+ g+=`<text x="${W}" y="16" font-size="18" font-weight="800" fill="${C.ink}" text-anchor="end">${money(total)}</text>`;
  let cx=0; const scale=W/total;
- parts.forEach(pt=>{const pw=pt.v*scale;
+ parts.forEach(pt=>{const pw=pt.v*scale, mid=cx+pw/2;
  g+=`<rect x="${cx}" y="${y}" width="${Math.max(pw-3,1)}" height="${barH}" rx="8" fill="${gf(pt.c,p)}"/>`;
- if(pw>150) g+=`<text x="${cx+pw/2}" y="${y+barH/2+5}" font-size="14.5" font-weight="700" fill="#fff" text-anchor="middle">${pt.label} · ${money(pt.v)}</text>`;
+ if(pw>150){
+  g+=`<text x="${mid}" y="${y+barH/2+5}" font-size="14.5" font-weight="700" fill="#fff" text-anchor="middle">${pt.label} · ${money(pt.v)}</text>`;
+ } else {
+  const anc = mid>W-90?'end':(mid<90?'start':'middle'), tx = anc==='end'?W:(anc==='start'?0:mid);
+  g+=`<text x="${tx}" y="${y+barH+22}" font-size="12.5" font-weight="700" fill="${C.body}" text-anchor="${anc}">${pt.label} · ${money(pt.v)}</text>`;
+ }
  cx+=pw;});
  return `<svg class="chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">${g}</svg>`;
 }
@@ -843,7 +848,7 @@ V.overview=`
 
  ${sec('What stood out','star','n')}
  <div class="card" style="padding:12px 30px">${nlist([
- ["You scaled UA hard.","$288.0k this window (+193% vs prior) at a $6.40 CPI, down 28%, with installs up 305% to about 45,000."],
+ ["UA scaled up.","$288.0k this window (+193% vs prior) at a $6.40 CPI, down 28%, with installs up 305% to about 45,000."],
  ["Ares monetization came online.","Baseball Hits offerwall supply ramped to $455.5k (from about $39k last period), now your single largest earning stream."],
  ["D7 ROAS held above target.","Blended 23% matured (Apr 24, May 26, June 22), all above your 20% goal, easing modestly from 25.7% as you scaled."],
  ["Swift monetization slipped −9%.","Its offerwall held (+3%), but Unity Ads fell −34%, idle inventory worth winning back."],
@@ -964,7 +969,7 @@ V.qoq=`
 
  <div style="margin-top:34px" class="callbox">
  <h4>What's driving it</h4>
- <p><b>Demand scaled hard.</b> We leaned into Baseball Hits across both platforms, spend +193% and installs +305% at a 28% lower CPI ($6.40). D7 ROAS matured to 23% blended (from 25.7%): Apr 24, May 26 and June 22, all above your 20% target even as spend tripled.</p>
+ <p><b>Demand grew fast.</b> We put more spend behind Baseball Hits on both platforms, spend +193% and installs +305% at a 28% lower CPI ($6.40). D7 ROAS matured to 23% blended (from 25.7%): Apr 24, May 26 and June 22, all above your 20% target even as spend tripled.</p>
  <p><b>Supply tilted to Ares.</b> Baseball Hits monetization newly ramped from about $15k to $475.5k, now the account's biggest earner. Swift slipped −17%: its offerwall grew +15%, but Unity Ads fell −38%, idle inventory we can reactivate.</p>
  </div>
  <div class="note-row">HvH TapJoy grew over the full window, but your team is watching a recent-weeks softening, see the TapJoy demand tab for the full read.</div>`;
@@ -1006,7 +1011,7 @@ V.ua=`
  <table class="t"><thead><tr><th style="padding-left:30px">Genre</th><th>Share of UA spend</th><th style="text-align:right;padding-right:30px">CPI</th></tr></thead><tbody>
  ${SRC.map(s=>`<tr><td class="lead2" style="padding-left:30px">${s[0]}</td><td>${sbar(s[1],40,130,C.demand)}<b style="color:var(--ink)">${s[1]}%</b></td><td class="n" style="padding-right:30px">$${s[2].toFixed(2)}</td></tr>`).join('')}
  </tbody></table>
- <p style="font-size:12px;color:var(--muted);padding:14px 30px 4px;line-height:1.7">The sources we bought, grouped by SensorTower genre. <b style="color:var(--ink)">Puzzle</b> takes the largest share of spend at 37%, and <b style="color:var(--ink)">tabletop and card games</b> came in the most efficient at scale ($6.67 CPI). Simulation ran the priciest ($9.51). A cleaner, competitor-safe way to see where the budget lands.</p>
+ <p style="font-size:12px;color:var(--muted);padding:14px 30px 4px;line-height:1.7">The sources we bought, grouped by SensorTower genre. <b style="color:var(--ink)">Puzzle</b> takes the largest share of spend at 37%, and <b style="color:var(--ink)">tabletop and card games</b> came in the most efficient ($6.67 CPI). Simulation ran the priciest ($9.51). A cleaner, competitor-safe way to see where the budget lands.</p>
  </div>
 
  ${sec('Monthly spend &amp; D7 ROAS','chart')}
@@ -1014,7 +1019,7 @@ V.ua=`
  <div class="card">${combo(['Apr','May','Jun'],[92234,67913,125643],[24,26,22])}<div class="cap">June: biggest, most efficient month. $125.6k at $4.76 CPI, D7 ROAS matured to 22% (goal 20%).</div></div>
  <div class="card" style="padding:12px 30px">${nlist([
  ["We scaled into June.","Spend Apr $92.2k → May $67.9k → Jun $125.6k as efficiency improved."],
- ["CPI kept falling.","$10.12 → $7.48 → $4.76, strong unit economics at scale."],
+ ["CPI kept falling.","$10.12 → $7.48 → $4.76, and the economics held as spend grew."],
  ["ROAS above target, every month.","Apr 24%, May 26% and June 22%, all above your 20% goal now that June has fully matured."],
  ])}</div>
  </div>
@@ -1050,7 +1055,7 @@ V.ua=`
  <div class="card" style="padding:12px 30px">${nlist([
  ["Clearing your D28 target as we scale.","Blended matured D28 IAP ROAS is <b style=\"color:var(--ink)\">56% iOS / 57% Android</b>, above your 50% goal. May cohorts were exceptional (74% / 71%); June normalized to about 47% as weekly spend tripled. Let's hold target discipline and align one Android goal as June/July volume matures."],
  ["Re-test Hybrid ROAS.","With D28 ad-rev share up (iOS 1.7%→5.7%, Android 4.6%→6.6% since April), hybrid is worth another run. Did something change on monetization in early May?"],
- ["Refresh the creative, lean into video.","Your <b style=\"color:var(--ink)\">video+playable already out-earns playable</b> (0.245 vs 0.204 D7) but is only 23% of spend. Baseball Hits runs <b style=\"color:var(--ink)\">0% pure video</b> (77% playable, 23% video+playable) while the sports category puts about 65% behind video. No new packs since May 22, and the recent Baseball Hits video uploads have all been 30 seconds, so let's add video and push longer, 45s+ and 60 to 90s, where we see more value."],
+ ["Refresh the creative, do more video.","Your <b style=\"color:var(--ink)\">video+playable already out-earns playable</b> (0.245 vs 0.204 D7) but is only 23% of spend. Baseball Hits runs <b style=\"color:var(--ink)\">0% pure video</b> (77% playable, 23% video+playable) while the sports category puts about 65% behind video. No new packs since May 22, and the recent Baseball Hits video uploads have all been 30 seconds, so let's add video and push longer, 45s+ and 60 to 90s, where we see more value."],
  ])}</div>
  </div>
 
@@ -1119,7 +1124,7 @@ const CREATIVES=[
   video:'assets/bh_pfbatting.mp4',note:"Your single biggest creative, close to a third of UA spend at the lowest CPI on the account."},
  {chip:'Best playable, Cal Raleigh',name:'Cal Raleigh Batting, Base Single',code:'P-CID-5-6 · Playable',spend:'$22.8k',share:'14%',cpi:'$6.11',d0:'4.3%',
   playable:'https://dashboards-advertiser-assets-prd.storage.googleapis.com/assets/69e26dcd57705163e7aa2b82/e0fb2074-00d1-43bd-bb51-c80ba75b9bab.html',
-  video:null,note:"A player-name hook that scaled hard on Android. Star power in the first frame."},
+  video:null,note:"A player-name hook that took off on Android. Star power in the first frame."},
  {chip:'Best video',name:'Video 30 on PF Batting',code:'V-CID-30-1 · Video',spend:'$16.0k',share:'10%',cpi:'$4.41',d0:'9.8%',
   playable:null,
   video:'assets/bh_vcid30.mp4',note:"Your top video cut, the lowest CPI on the account and the best D0 ROAS of the showcase. Proof that video converts harder than playables here."},
@@ -1319,7 +1324,7 @@ V.owd=`
  <div class="cap">98% of HvH TapJoy spend runs through the classic offerwall; the rest across web, SDK, QR and the new Discover placements.</div></div>
  <div class="card" style="padding:12px 30px">${nlist([
  ["Almost all classic offerwall.","Web, in-SDK, QR and the new Offerwall Discover placements are about $8.5k combined, barely switched on."],
- ["Offerwall Discover is brand new.","A fresh placement ($130 so far), incremental inventory we haven't yet leaned into."],
+ ["Offerwall Discover is brand new.","A fresh placement ($130 so far), incremental inventory we haven't tapped yet."],
  ["Room in placement mix.","Diversifying beyond the classic wall is a lever before concluding the channel is tapped out."],
  ])}</div>
  </div>
@@ -1848,9 +1853,11 @@ document.addEventListener('keydown',function(e){if((e.key==='n'||e.key==='N')&&!
 function animateCover(){
  document.querySelectorAll('[data-to]').forEach(el=>{
  const to=parseFloat(el.dataset.to), dec=+(el.dataset.dec||0), pre=el.dataset.pre||'', suf=el.dataset.suf||'', comma=el.dataset.comma==='1';
- const dur=1200, t0=performance.now();
  const fmt=v=>pre+(comma?Math.round(v).toLocaleString():v.toFixed(dec))+suf;
+ if(!window.requestAnimationFrame || (window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches)){ el.textContent=fmt(to); return; }
+ const dur=1200, t0=performance.now();
  (function step(t){let p=Math.min((t-t0)/dur,1);p=1-Math.pow(1-p,3);el.textContent=fmt(to*p);if(p<1)requestAnimationFrame(step);})(t0);
+ setTimeout(()=>{el.textContent=fmt(to);}, dur+220);
  });
 }
 const progEl=document.getElementById('scrollprog');
